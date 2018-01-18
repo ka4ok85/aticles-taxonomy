@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: evgeny
+      comment: "Creating 'web_resources' table"
+      changes:
+        - createTable:
+            tableName: web_resources
+            columns:
+              - column:
+                  name: id
+                  type: int(11)
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: url
+                  type: varchar(1000)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+

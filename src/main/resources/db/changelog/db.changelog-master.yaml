@@ -151,3 +151,36 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     unique: false
+  - changeSet:
+      id: 5
+      author: evgeny
+      comment: "Creating 'article_join_category' table"
+      changes:
+        - createTable:
+            tableName: article_join_category
+            columns:
+              - column:
+                  name: id
+                  type: int(11)
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: article_id
+                  type: varchar(11)
+                  constraints:
+                    nullable: false
+                    unique: false
+              - column:
+                  name: category_id
+                  type: varchar(11)
+                  constraints:
+                    nullable: false
+                    unique: false
+              - column:
+                  name: weight
+                  type: float(4,2)
+                  constraints:
+                    nullable: false
+                    unique: false

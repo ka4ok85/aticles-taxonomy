@@ -184,3 +184,16 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     unique: false
+  - changeSet:
+      id: 6
+      author: evgeny
+      comment: "Adding FK for 'articles' table"
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: rss_feed_id
+            baseTableName: articles
+            constraintName: fk_rss_feed_id_1
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: rss_feeds                    

@@ -100,3 +100,54 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     unique: true
+  - changeSet:
+      id: 4
+      author: evgeny
+      comment: "Creating 'articles' table"
+      changes:
+        - createTable:
+            tableName: articles
+            columns:
+              - column:
+                  name: id
+                  type: int(11)
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: url
+                  type: varchar(1000)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: title
+                  type: varchar(1000)
+                  constraints:
+                    nullable: false
+                    unique: false
+              - column:
+                  name: created_datetime
+                  type: datetime
+                  constraints:
+                    nullable: false
+                    unique: false
+              - column:
+                  name: fetched_datetime
+                  type: datetime
+                  constraints:
+                    nullable: false
+                    unique: false
+              - column:
+                  name: rss_feed_id
+                  type: int(11)
+                  constraints:
+                    nullable: false
+                    unique: false
+              - column:
+                  name: is_category_set
+                  type: int(1)
+                  constraints:
+                    nullable: false
+                    unique: false

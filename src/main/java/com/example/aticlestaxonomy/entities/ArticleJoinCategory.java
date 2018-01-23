@@ -26,7 +26,7 @@ public class ArticleJoinCategory {
 
 	@Column(name = "weight", unique = false, nullable = false)
 	@NotNull
-	private Long weight;
+	private Float weight;
 
 	public Long getId() {
 		return id;
@@ -52,11 +52,11 @@ public class ArticleJoinCategory {
 		this.categoryId = categoryId;
 	}
 
-	public Long getWeight() {
+	public Float getWeight() {
 		return weight;
 	}
 
-	public void setWeight(Long weight) {
+	public void setWeight(Float weight) {
 		this.weight = weight;
 	}
 

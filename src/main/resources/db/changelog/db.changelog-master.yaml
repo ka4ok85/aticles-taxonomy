@@ -217,4 +217,14 @@ databaseChangeLog:
             onDelete: RESTRICT
             onUpdate: RESTRICT
             referencedColumnNames: id
-            referencedTableName: categories  
+            referencedTableName: categories
+  - changeSet:
+      id: 8
+      author: evgeny
+      comment: "Adding Categories values"
+      changes:
+        - sqlFile:
+            path: categories.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            dbms: mysql

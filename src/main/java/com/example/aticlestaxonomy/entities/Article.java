@@ -47,7 +47,7 @@ public class Article {
 	@NotNull
 	private Long isCategorySet;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "article_id", referencedColumnName = "id")
 	private Set<ArticleJoinCategory> articleJoinCategorySet = new HashSet<>();
 

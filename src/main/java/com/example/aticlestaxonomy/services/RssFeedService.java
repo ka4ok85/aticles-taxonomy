@@ -6,4 +6,5 @@ import com.example.aticlestaxonomy.entities.RssFeed;
 
 public interface RssFeedService {
 	public List<RssFeed> getRssFeedsAvaialbleForProcess();
+	public boolean processFeed(RssFeed rssFeed);
 }

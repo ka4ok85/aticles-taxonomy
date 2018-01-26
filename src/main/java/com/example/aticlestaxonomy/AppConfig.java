@@ -3,14 +3,14 @@ package com.example.aticlestaxonomy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.example.aticlestaxonomy.services.WebResourceService;
-import com.example.aticlestaxonomy.services.WebResourceServiceImplementation;
+import com.example.aticlestaxonomy.services.RssFeedService;
+import com.example.aticlestaxonomy.services.RssFeedServiceImplementation;
 
 @Configuration
 public class AppConfig {
 
 	@Bean
-	public WebResourceService webResourceService() {
-		return new WebResourceServiceImplementation();
+	public RssFeedService rssFeedService() {
+		return new RssFeedServiceImplementation();
 	}
 }

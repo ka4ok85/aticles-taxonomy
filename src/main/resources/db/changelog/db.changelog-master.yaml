@@ -266,3 +266,15 @@ databaseChangeLog:
               - column:
                   name: status
                   value: "enabled"                  
+  - changeSet:
+      id: 10
+      author: evgeny
+      changes:
+      - addColumn:
+          columns:
+          - column:
+              name: feed_type
+              type: varchar(255)
+              constraints:
+                nullable: true
+          tableName: rss_feeds

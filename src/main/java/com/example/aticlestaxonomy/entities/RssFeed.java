@@ -30,6 +30,9 @@ public class RssFeed {
 
 	private String status;
 
+	@Column(name = "feed_type")
+	private String feedType;
+
 	public Long getId() {
 		return id;
 	}
@@ -78,10 +81,19 @@ public class RssFeed {
 		this.status = status;
 	}
 
+	public String getFeedType() {
+		return feedType;
+	}
+
+	public void setFeedType(String feedType) {
+		this.feedType = feedType;
+	}
+
 	@Override
 	public String toString() {
 		return "RssFeed [id=" + id + ", webResourceId=" + webResourceId + ", url=" + url + ", lastFetchDatetime="
-				+ lastFetchDatetime + ", fetchWindow=" + fetchWindow + ", status=" + status + "]";
+				+ lastFetchDatetime + ", fetchWindow=" + fetchWindow + ", status=" + status + ", feedType=" + feedType
+				+ "]";
 	}
 
 }

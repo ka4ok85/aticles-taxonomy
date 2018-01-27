@@ -278,3 +278,14 @@ databaseChangeLog:
               constraints:
                 nullable: true
           tableName: rss_feeds
+  - changeSet:
+      id: 11
+      author: evgeny
+      changes:
+      - update:
+          columns:
+          - column:
+              name: feed_type
+              value: "Wordpress"
+          tableName: rss_feeds
+          where: id=1

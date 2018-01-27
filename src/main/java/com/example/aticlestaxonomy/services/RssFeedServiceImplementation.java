@@ -23,7 +23,7 @@ public class RssFeedServiceImplementation implements RssFeedService {
 	}
 
 	@Override
-	public boolean processFeed(RssFeed rssFeed) {
+	public int processFeed(RssFeed rssFeed) {
 
 		CompletableFuture<String> future1 = CompletableFuture.supplyAsync(() -> "Hello");
 		CompletableFuture<String> future2 = CompletableFuture.supplyAsync(() -> "Beautiful");
@@ -37,7 +37,7 @@ public class RssFeedServiceImplementation implements RssFeedService {
 
 		List<RssFeed> result = new ArrayList<RssFeed>();
 
-		return false;
+		return 0;
 	}
 
 	@Override

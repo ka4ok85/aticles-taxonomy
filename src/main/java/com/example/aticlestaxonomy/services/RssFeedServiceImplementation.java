@@ -1,5 +1,6 @@
 package com.example.aticlestaxonomy.services;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -37,6 +38,14 @@ public class RssFeedServiceImplementation implements RssFeedService {
 		List<RssFeed> result = new ArrayList<RssFeed>();
 
 		return false;
+	}
+
+	@Override
+	public RssFeed setLastFetchDatetimeToNow(RssFeed rssFeed) {
+		rssFeed.setLastFetchDatetime(LocalDateTime.now());
+		rssFeedRepository.save(rssFeed);
+
+		return rssFeed;
 	}
 
 }

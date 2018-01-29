@@ -26,8 +26,7 @@ public class RssFeedServiceImplementation implements RssFeedService {
 
 	@Override
 	public int processFeed(RssFeed rssFeed) {
-
-		/*
+/*
 		CompletableFuture<String> future1 = CompletableFuture.supplyAsync(() -> "Hello");
 		CompletableFuture<String> future2 = CompletableFuture.supplyAsync(() -> "Beautiful");
 		CompletableFuture<String> future3 = CompletableFuture.supplyAsync(() -> "World");
@@ -39,24 +38,15 @@ public class RssFeedServiceImplementation implements RssFeedService {
 		System.out.println(combined);
 */
 		String concreteRssFeedReaderClassName = rssFeed.getFeedType() + "RssFeedReader";
-		//AbstractRssFeedReader rssFeedReader = new concreteRssFeedReaderClassName();
-
-		//String url, LocalDateTime lastFetchDate
 		Class<?> clazz;
 		try {
-			clazz = Class.forName("com.example.aticlestaxonomy.services.rssreaders.WordpressRssFeedReader");
+			clazz = Class.forName("com.example.aticlestaxonomy.services.rssreaders." + concreteRssFeedReaderClassName);
 			Constructor<?> constructor = clazz.getConstructor(String.class, LocalDateTime.class);
 			AbstractRssFeedReader rssFeedReader = (AbstractRssFeedReader) constructor.newInstance(rssFeed.getUrl(), rssFeed.getLastFetchDatetime());
 			rssFeedReader.readRssFeed();
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
-		
-		//rssFeed.getFeedType()
-		List<RssFeed> result = new ArrayList<RssFeed>();
 
 		return 0;
 	}

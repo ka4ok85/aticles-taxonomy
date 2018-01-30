@@ -289,3 +289,14 @@ databaseChangeLog:
               value: "Wordpress"
           tableName: rss_feeds
           where: id=1
+  - changeSet:
+      id: 12
+      author: evgeny
+      changes:
+      - update:
+          columns:
+          - column:
+              name: url
+              value: "http://feeds.feedburner.com/generalmillsblog"
+          tableName: rss_feeds
+          where: id=1

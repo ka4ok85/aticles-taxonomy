@@ -300,3 +300,45 @@ databaseChangeLog:
               value: "http://feeds.feedburner.com/generalmillsblog"
           tableName: rss_feeds
           where: id=1
+  - changeSet:
+      id: 13
+      author: evgeny
+      comment: "Adding 'Mazda USA Blog' RSS feed"
+      changes:
+        - insert:
+            tableName: web_resources
+            columns:
+              - column:
+                  name: id
+                  value: "2"
+              - column:
+                  name: name
+                  value: "Mazda USA Blog"
+              - column:
+                  name: url
+                  value: "https://insidemazda.mazdausa.com"
+        - insert:
+            tableName: rss_feeds
+            columns:
+              - column:
+                  name: id
+                  value: "2"
+              - column:
+                  name: web_resource_id
+                  value: "2"
+              - column:
+                  name: url
+                  value: "https://insidemazda.mazdausa.com/feed/"
+              - column:
+                  name: last_fetch_datetime
+                  value: "2017-01-01 00:00:00"
+              - column:
+                  name: fetch_window
+                  value: "3600"
+              - column:
+                  name: status
+                  value: "enabled"
+              - column:
+                  name: feed_type
+                  value: "Wordpress"
+                  

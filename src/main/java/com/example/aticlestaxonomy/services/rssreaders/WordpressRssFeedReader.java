@@ -2,9 +2,10 @@ package com.example.aticlestaxonomy.services.rssreaders;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -12,7 +13,9 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
+import com.example.aticlestaxonomy.dto.Article;
 import com.example.aticlestaxonomy.services.AbstractRssFeedReader;
+import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
@@ -25,60 +28,37 @@ public class WordpressRssFeedReader extends AbstractRssFeedReader {
 	}
 
 	@Override
-	protected int readRssFeed() {
-		System.out.println("I am WordpressRssFeedReader readRssFeed method");
-		
-		
-		String url = "http://stackoverflow.com/feeds/tag?tagnames=rome";
-		url = "http://feeds.feedburner.com/generalmillsblog";
-		//url = this.url;
-		try (CloseableHttpClient client = HttpClients.createMinimal()) {
-		  HttpUriRequest request = new HttpGet(url);
-		  try (
-				  CloseableHttpResponse response = client.execute(request);
-				  InputStream stream = response.getEntity().getContent()) {
-			  		SyndFeedInput input = new SyndFeedInput();
-			  		SyndFeed feed = input.build(new XmlReader(stream));
-			  		System.out.println(feed.getTitle());
-		  } catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FeedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		}
-		/*
-		
-		
-		URL feedUrl;
+	protected List<Article> readRssFeed() {
+
+		CloseableHttpClient client = HttpClients.createMinimal();
+		HttpUriRequest request = new HttpGet(url);
+
+		CloseableHttpResponse response;
 		try {
-			feedUrl = new URL(url);
-	        SyndFeedInput input = new SyndFeedInput();
-	        SyndFeed feed = input.build(new XmlReader(feedUrl));
-	        
-	        System.out.println(feed);
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
+			response = client.execute(request);
+			InputStream stream = response.getEntity().getContent();
+			SyndFeedInput input = new SyndFeedInput();
+			SyndFeed feed = input.build(new XmlReader(stream));
+			
+			LocalDateTime articleDateTime;
+			for (SyndEntry feedEntry : feed.getEntries()) {
+				Date date = feedEntry.getPublishedDate();
+				articleDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+				
+				if (this.lastFetchDate.isBefore(articleDateTime)) {
+					Article article = new Article(feedEntry.getTitle(), articleDateTime, feedEntry.getUri());
+					this.articles.add(article);
+				}
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FeedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-*/ catch (IOException e) {
-	// TODO Auto-generated catch block
-	e.printStackTrace();
-}
-		
-		
-		return 0;
+		return this.articles;
 	}
 
 }

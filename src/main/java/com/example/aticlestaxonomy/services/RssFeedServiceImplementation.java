@@ -11,13 +11,17 @@ import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.aticlestaxonomy.dto.Article;
 import com.example.aticlestaxonomy.entities.RssFeed;
 import com.example.aticlestaxonomy.repositories.RssFeedRepository;
 
 public class RssFeedServiceImplementation implements RssFeedService {
-
+	
 	@Autowired
 	private RssFeedRepository rssFeedRepository;
+
+	@Autowired
+	private ArticleService articleService;
 
 	@Override
 	public List<RssFeed> getRssFeedsAvaialbleForProcess() {
@@ -37,18 +41,24 @@ public class RssFeedServiceImplementation implements RssFeedService {
 
 		System.out.println(combined);
 */
+		int addedArticles = 0;
 		String concreteRssFeedReaderClassName = rssFeed.getFeedType() + "RssFeedReader";
 		Class<?> clazz;
 		try {
 			clazz = Class.forName("com.example.aticlestaxonomy.services.rssreaders." + concreteRssFeedReaderClassName);
 			Constructor<?> constructor = clazz.getConstructor(String.class, LocalDateTime.class);
 			AbstractRssFeedReader rssFeedReader = (AbstractRssFeedReader) constructor.newInstance(rssFeed.getUrl(), rssFeed.getLastFetchDatetime());
-			rssFeedReader.readRssFeed();
+			List<Article> freshArticles = rssFeedReader.readRssFeed();
+			for (Article article : freshArticles) {
+				
+				articleService.saveArticle(article, rssFeed.getId());
+				addedArticles++;
+			}
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
 
-		return 0;
+		return addedArticles;
 	}
 
 	@Override
@@ -58,5 +68,6 @@ public class RssFeedServiceImplementation implements RssFeedService {
 
 		return rssFeed;
 	}
+
 
 }

@@ -7,6 +7,13 @@ public class Article {
 	private LocalDateTime pubDate;
 	private String link;
 
+	public Article(String title, LocalDateTime pubDate, String link) {
+		super();
+		this.title = title;
+		this.pubDate = pubDate;
+		this.link = link;
+	}
+
 	public String getTitle() {
 		return title;
 	}

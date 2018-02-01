@@ -18,6 +18,6 @@ public abstract class AbstractRssFeedReader {
 		this.lastFetchDate = lastFetchDate;
 	}
 
-	protected abstract int readRssFeed();
+	protected abstract List<Article> readRssFeed();
 
 }

@@ -11,7 +11,7 @@ public class ArticleServiceImplementation implements ArticleService {
 
 	@Autowired
 	private ArticleRepository articleRepository;
-	
+
 	@Override
 	public Article saveArticle(com.example.aticlestaxonomy.dto.Article article, Long rssFeedId) {
 		Article articleEntity = new Article();
@@ -21,9 +21,8 @@ public class ArticleServiceImplementation implements ArticleService {
 		articleEntity.setFetchedDatetime(LocalDateTime.now());
 		articleEntity.setIsCategorySet(0L);
 		articleEntity.setRssFeedId(rssFeedId);
-		
+
 		return articleRepository.save(articleEntity);
-		//return null;
 	}
 
 }

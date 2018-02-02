@@ -1,11 +1,12 @@
 package com.example.aticlestaxonomy.services;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import com.example.aticlestaxonomy.entities.RssFeed;
 
 public interface RssFeedService {
 	public List<RssFeed> getRssFeedsAvaialbleForProcess();
-	public int processFeed(RssFeed rssFeed);
+	public CompletableFuture<Integer> processFeed(RssFeed rssFeed);
 	public RssFeed setLastFetchDatetimeToNow(RssFeed rssFeed);
 }

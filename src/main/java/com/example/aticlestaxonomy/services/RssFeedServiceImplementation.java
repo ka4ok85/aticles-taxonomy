@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 import org.slf4j.Logger;
@@ -17,13 +16,13 @@ import com.example.aticlestaxonomy.entities.RssFeed;
 import com.example.aticlestaxonomy.repositories.RssFeedRepository;
 
 public class RssFeedServiceImplementation implements RssFeedService {
-	
+
 	@Autowired
 	private RssFeedRepository rssFeedRepository;
 
 	@Autowired
 	private ArticleService articleService;
-	
+
 	private static final Logger log = LoggerFactory.getLogger(RssFeedServiceImplementation.class);
 
 	@Override
@@ -41,7 +40,6 @@ public class RssFeedServiceImplementation implements RssFeedService {
 
 	@Override
 	public CompletableFuture<Integer> processFeed(RssFeed rssFeed) {
-		
 		return CompletableFuture.supplyAsync((Supplier<Integer>) () -> {
 
 			log.info("Starting processing feed ID={}, URL={}", rssFeed.getId(), rssFeed.getUrl());
@@ -52,30 +50,22 @@ public class RssFeedServiceImplementation implements RssFeedService {
 			try {
 				clazz = Class.forName("com.example.aticlestaxonomy.services.rssreaders." + concreteRssFeedReaderClassName);
 				Constructor<?> constructor = clazz.getConstructor(String.class, LocalDateTime.class);
-				AbstractRssFeedReader rssFeedReader = (AbstractRssFeedReader) constructor.newInstance(rssFeed.getUrl(), rssFeed.getLastFetchDatetime());
+				AbstractRssFeedReader rssFeedReader = (AbstractRssFeedReader) constructor.newInstance(rssFeed.getUrl(),
+						rssFeed.getLastFetchDatetime());
 				List<Article> freshArticles = rssFeedReader.readRssFeed();
 				for (Article article : freshArticles) {
-					
 					articleService.saveArticle(article, rssFeed.getId());
 					addedArticles++;
 				}
-			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
+					| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				e.printStackTrace();
 			}
 
-						
-		    try {
-		        TimeUnit.SECONDS.sleep(5);
-		    } catch (InterruptedException e) {
-		       throw new IllegalStateException(e);
-		    }
-			
-		    log.info("Finished processing feed ID={}, URL={}", rssFeed.getId(), rssFeed.getUrl());
-		    
-		    return addedArticles;
+			log.info("Finished processing feed ID={}, URL={}", rssFeed.getId(), rssFeed.getUrl());
+
+			return addedArticles;
 		});
-
 	}
-
 
 }

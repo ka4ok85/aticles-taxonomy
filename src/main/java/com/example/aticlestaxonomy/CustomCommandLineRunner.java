@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,41 +36,40 @@ public class CustomCommandLineRunner implements CommandLineRunner {
 		
 		System.out.println("Starting CustomCommandLineRunner");
 		
-		/*
-		List<RssFeed> y = rssFeedRepository.findRssFeedsReadyForProcessing();
-		for (RssFeed rssFeed : y) {
-			System.out.println(rssFeed);
-		}
-		*/
-		
 		
 		List<RssFeed> rssFeeds = rssFeedService.getRssFeedsAvaialbleForProcess();
-		//System.out.println(rssFeeds);
 		
-		//CompletableFuture<Integer> future = new CompletableFuture<Integer>();
-		
-		
-		/*
-		Collector<Stream<Integer>, Integer, Integer> y;
-		Stream<Integer> t = rssFeeds.stream().map(rssFeedService::processFeed).collect(y);
-		*/
-		
-		
+/*		
 		for (RssFeed rssFeed : rssFeeds) {
 			System.out.println(rssFeed);
 			rssFeedService.processFeed(rssFeed);
 			rssFeedService.setLastFetchDatetimeToNow(rssFeed);
-			/*
-			CompletableFuture<Integer> getUsersDetail(RssFeed r) {
-				return CompletableFuture.thenApplyAsync((RssFeed r) -> {
-					rssFeedService.processFeed(r);
-				});	
-			};
-			*/			
-			
+		
 		}
+*/
+		
+		List<CompletableFuture<Integer>> pageContentFutures = rssFeeds.stream()
+		        .map(webPageLink -> rssFeedService.processFeed(webPageLink))
+		        .collect(Collectors.toList());
 
 		
+
+		// Create a combined Future using allOf()
+		CompletableFuture<Void> allFutures = CompletableFuture.allOf(
+		        pageContentFutures.toArray(new CompletableFuture[pageContentFutures.size()])
+		);
+	
+		CompletableFuture<List<Integer>> allPageContentsFuture = allFutures.thenApply(v -> {
+			   return pageContentFutures.stream()
+			           .map(pageContentFuture -> pageContentFuture.join())
+			           .collect(Collectors.toList());
+			});
+		/*
+		List<Integer> e = allPageContentsFuture.get();
+		for (Integer integer : e) {
+			System.out.println(integer);
+		}
+		*/
 		System.out.println("Ended CustomCommandLineRunner");
 
 		

@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,37 +42,25 @@ public class CustomCommandLineRunner implements CommandLineRunner {
 		
 		List<RssFeed> rssFeeds = rssFeedService.getRssFeedsAvaialbleForProcess();
 		
-/*		
-		for (RssFeed rssFeed : rssFeeds) {
-			System.out.println(rssFeed);
-			rssFeedService.processFeed(rssFeed);
-			rssFeedService.setLastFetchDatetimeToNow(rssFeed);
-		
-		}
-*/
-		
 		List<CompletableFuture<Integer>> pageContentFutures = rssFeeds.stream()
 		        .map(webPageLink -> rssFeedService.processFeed(webPageLink))
 		        .collect(Collectors.toList());
 
-		
 
 		// Create a combined Future using allOf()
 		CompletableFuture<Void> allFutures = CompletableFuture.allOf(
 		        pageContentFutures.toArray(new CompletableFuture[pageContentFutures.size()])
 		);
-	
-		CompletableFuture<List<Integer>> allPageContentsFuture = allFutures.thenApply(v -> {
-			   return pageContentFutures.stream()
+
+		CompletableFuture<Integer> allPageContentsFuture = allFutures.thenApply(v -> {
+
+			return pageContentFutures.stream()
 			           .map(pageContentFuture -> pageContentFuture.join())
-			           .collect(Collectors.toList());
+			           .collect(Collectors.summingInt(Integer::intValue));
 			});
-		/*
-		List<Integer> e = allPageContentsFuture.get();
-		for (Integer integer : e) {
-			System.out.println(integer);
-		}
-		*/
+		Integer totalCount = allPageContentsFuture.get();
+		System.out.println("Total added articles count: "  + totalCount);
+
 		System.out.println("Ended CustomCommandLineRunner");
 
 		

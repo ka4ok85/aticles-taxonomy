@@ -26,6 +26,11 @@ public class CustomCommandLineRunner implements CommandLineRunner {
 		log.info("Starting CustomCommandLineRunner");
 
 		List<RssFeed> rssFeeds = rssFeedService.getRssFeedsAvaialbleForProcess();
+		if (rssFeeds.size() == 0) {
+			log.info("All feeds already processed.");
+			log.info("Ended CustomCommandLineRunner");
+			return ;
+		}
 
 		// tasks processing list of rssFeeds and collecting number of added articles per each feed
 		List<CompletableFuture<Integer>> addedRssArticlesFutures = rssFeeds.stream()

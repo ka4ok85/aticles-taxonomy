@@ -1,44 +1,29 @@
 package com.example.aticlestaxonomy;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.ToIntFunction;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
-import com.example.aticlestaxonomy.entities.Article;
 import com.example.aticlestaxonomy.entities.RssFeed;
-import com.example.aticlestaxonomy.repositories.ArticleRepository;
-import com.example.aticlestaxonomy.repositories.RssFeedRepository;
 import com.example.aticlestaxonomy.services.RssFeedService;
 
 @Configuration
 public class CustomCommandLineRunner implements CommandLineRunner {
 
 	@Autowired
-	private ArticleRepository articleRepository;
-	
-	@Autowired
-	private RssFeedRepository rssFeedRepository;
-	
-	@Autowired
 	private RssFeedService rssFeedService;
+	
+	private static final Logger log = LoggerFactory.getLogger(CustomCommandLineRunner.class);
 	
 	@Override
 	public void run(String... args) throws Exception {
-		// TODO Auto-generated method stub
-		
-		System.out.println("Starting CustomCommandLineRunner");
-		
+		log.info("Starting CustomCommandLineRunner");
 		
 		List<RssFeed> rssFeeds = rssFeedService.getRssFeedsAvaialbleForProcess();
 		
@@ -59,12 +44,9 @@ public class CustomCommandLineRunner implements CommandLineRunner {
 			           .collect(Collectors.summingInt(Integer::intValue));
 			});
 		Integer totalCount = allPageContentsFuture.get();
-		System.out.println("Total added articles count: "  + totalCount);
 
-		System.out.println("Ended CustomCommandLineRunner");
-
-		
-		
+		log.info("Total added articles count: {}", totalCount);
+		log.info("Ended CustomCommandLineRunner");
 	}
 
 }

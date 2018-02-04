@@ -18,32 +18,33 @@ public class CustomCommandLineRunner implements CommandLineRunner {
 
 	@Autowired
 	private RssFeedService rssFeedService;
-	
+
 	private static final Logger log = LoggerFactory.getLogger(CustomCommandLineRunner.class);
-	
+
 	@Override
 	public void run(String... args) throws Exception {
 		log.info("Starting CustomCommandLineRunner");
-		
+
 		List<RssFeed> rssFeeds = rssFeedService.getRssFeedsAvaialbleForProcess();
-		
-		List<CompletableFuture<Integer>> pageContentFutures = rssFeeds.stream()
-		        .map(webPageLink -> rssFeedService.processFeed(webPageLink))
+
+		// tasks processing list of rssFeeds and collecting number of added articles per each feed
+		List<CompletableFuture<Integer>> addedRssArticlesFutures = rssFeeds.stream()
+		        .map(rssFeed -> rssFeedService.processFeed(rssFeed))
 		        .collect(Collectors.toList());
 
-
-		// Create a combined Future using allOf()
+		// completes when all individual futures completed 
 		CompletableFuture<Void> allFutures = CompletableFuture.allOf(
-		        pageContentFutures.toArray(new CompletableFuture[pageContentFutures.size()])
+				addedRssArticlesFutures.toArray(new CompletableFuture[addedRssArticlesFutures.size()])
 		);
 
-		CompletableFuture<Integer> allPageContentsFuture = allFutures.thenApply(v -> {
-
-			return pageContentFutures.stream()
-			           .map(pageContentFuture -> pageContentFuture.join())
+		// tasks summing added articles counts for each feed into total count 
+		CompletableFuture<Integer> totalCountFuture = allFutures.thenApply(v -> {
+			return addedRssArticlesFutures.stream()
+			           .map(addedRssArticlesFuture -> addedRssArticlesFuture.join())
 			           .collect(Collectors.summingInt(Integer::intValue));
-			});
-		Integer totalCount = allPageContentsFuture.get();
+		});
+
+		Integer totalCount = totalCountFuture.get();
 
 		log.info("Total added articles count: {}", totalCount);
 		log.info("Ended CustomCommandLineRunner");

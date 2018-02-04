@@ -30,8 +30,7 @@ public class RssFeedServiceImplementation implements RssFeedService {
 		return rssFeedRepository.findRssFeedsReadyForProcessing();
 	}
 
-	@Override
-	public RssFeed setLastFetchDatetimeToNow(RssFeed rssFeed) {
+	private RssFeed setLastFetchDatetimeToNow(RssFeed rssFeed) {
 		rssFeed.setLastFetchDatetime(LocalDateTime.now());
 		rssFeedRepository.save(rssFeed);
 
@@ -62,6 +61,7 @@ public class RssFeedServiceImplementation implements RssFeedService {
 				e.printStackTrace();
 			}
 
+			this.setLastFetchDatetimeToNow(rssFeed);
 			log.info("Finished processing feed ID={}, URL={}", rssFeed.getId(), rssFeed.getUrl());
 
 			return addedArticles;

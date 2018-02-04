@@ -8,5 +8,4 @@ import com.example.aticlestaxonomy.entities.RssFeed;
 public interface RssFeedService {
 	public List<RssFeed> getRssFeedsAvaialbleForProcess();
 	public CompletableFuture<Integer> processFeed(RssFeed rssFeed);
-	public RssFeed setLastFetchDatetimeToNow(RssFeed rssFeed);
 }

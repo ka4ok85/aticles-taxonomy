@@ -1,6 +1,6 @@
 package com.example.aticlestaxonomy.services.rssreaders;
 
-import java.io.IOException;
+
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -17,7 +17,6 @@ import com.example.aticlestaxonomy.dto.Article;
 import com.example.aticlestaxonomy.services.AbstractRssFeedReader;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
-import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 
@@ -28,7 +27,7 @@ public class WordpressRssFeedReader extends AbstractRssFeedReader {
 	}
 
 	@Override
-	protected List<Article> readRssFeed() {
+	protected List<Article> readRssFeed() throws Exception {
 
 		CloseableHttpClient client = HttpClients.createMinimal();
 		HttpUriRequest request = new HttpGet(url);
@@ -50,12 +49,8 @@ public class WordpressRssFeedReader extends AbstractRssFeedReader {
 					this.articles.add(article);
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (FeedException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
 		}
 
 		return this.articles;

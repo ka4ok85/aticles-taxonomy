@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.example.aticlestaxonomy.dto.Article;
 import com.example.aticlestaxonomy.entities.RssFeed;
@@ -57,8 +58,12 @@ public class RssFeedServiceImplementation implements RssFeedService {
 					throw new Exception(e.getMessage());
 				}
 				for (Article article : freshArticles) {
-					articleService.saveArticle(article, rssFeed.getId());
-					addedArticles++;
+					try {
+						articleService.saveArticle(article, rssFeed.getId());
+						addedArticles++;
+				    } catch (DataIntegrityViolationException e) {
+				    	log.warn("Article is already fetched! URL: {}", article.getLink());
+				    }
 				}
 
 				this.setLastFetchDatetimeToNow(rssFeed);

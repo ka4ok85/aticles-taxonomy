@@ -1,7 +1,6 @@
 package com.example.aticlestaxonomy.services;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -51,18 +50,22 @@ public class RssFeedServiceImplementation implements RssFeedService {
 				Constructor<?> constructor = clazz.getConstructor(String.class, LocalDateTime.class);
 				AbstractRssFeedReader rssFeedReader = (AbstractRssFeedReader) constructor.newInstance(rssFeed.getUrl(),
 						rssFeed.getLastFetchDatetime());
-				List<Article> freshArticles = rssFeedReader.readRssFeed();
+				List<Article> freshArticles = null;
+				try {
+					freshArticles = rssFeedReader.readRssFeed();
+				} catch (Exception e) {
+					throw new Exception(e.getMessage());
+				}
 				for (Article article : freshArticles) {
 					articleService.saveArticle(article, rssFeed.getId());
 					addedArticles++;
 				}
-			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
-					| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
-			}
 
-			this.setLastFetchDatetimeToNow(rssFeed);
-			log.info("Finished processing feed ID={}, URL={}", rssFeed.getId(), rssFeed.getUrl());
+				this.setLastFetchDatetimeToNow(rssFeed);
+				log.info("Finished processing feed ID={}, URL={}", rssFeed.getId(), rssFeed.getUrl());
+			} catch (Exception e) {
+				log.error("Error during processing feed ID={}, URL={}. Error Message: {}", rssFeed.getId(), rssFeed.getUrl(), e.getMessage());
+			}
 
 			return addedArticles;
 		});

@@ -12,10 +12,19 @@ import org.springframework.context.annotation.Configuration;
 
 import com.example.aticlestaxonomy.entities.RssFeed;
 import com.example.aticlestaxonomy.services.RssFeedService;
+import com.ibm.watson.developer_cloud.conversation.v1.Conversation;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalLanguageUnderstanding;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalysisResults;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalyzeOptions;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.EntitiesOptions;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.Features;
 
 @Configuration
 public class CustomCommandLineRunner implements CommandLineRunner {
 
+	@Autowired
+	protected NaturalLanguageUnderstanding service;
+	
 	@Autowired
 	private RssFeedService rssFeedService;
 
@@ -24,7 +33,20 @@ public class CustomCommandLineRunner implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		log.info("Starting CustomCommandLineRunner");
-
+		
+		EntitiesOptions entities = new EntitiesOptions.Builder().sentiment(true).limit(1).build();
+		Features features = new Features.Builder().entities(entities).build();
+		AnalyzeOptions parameters = new AnalyzeOptions.Builder().url("www.cnn.com").features(features).build();
+		AnalysisResults results = service.analyze(parameters).execute();
+		System.out.println(results);
+		System.out.println(results.getAnalyzedText());
+		System.out.println(results.getSentiment().getDocument().getLabel());
+		System.out.println(results.getSentiment().getDocument().getScore());
+		
+		//AnalyzeOptions analyzeOptions = new AnalyzeOptions();
+		//analyzeOptions.html();
+		//service.analyze(analyzeOptions);
+		/*
 		List<RssFeed> rssFeeds = rssFeedService.getRssFeedsAvaialbleForProcess();
 		if (rssFeeds.size() == 0) {
 			log.info("All feeds already processed.");
@@ -52,6 +74,7 @@ public class CustomCommandLineRunner implements CommandLineRunner {
 		Integer totalCount = totalCountFuture.get();
 
 		log.info("Total added articles count: {}", totalCount);
+		*/
 		log.info("Ended CustomCommandLineRunner");
 	}
 

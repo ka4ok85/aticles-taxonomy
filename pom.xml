@@ -60,18 +60,28 @@
 			<artifactId>httpclient</artifactId>
 			<version>4.5.5</version>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>com.ibm.watson.developer_cloud</groupId>
 			<artifactId>watson-spring-boot-starter</artifactId>
 			<version>0.0.2</version>
 		</dependency>
+		-->
+		<dependency>
+			<groupId>com.ibm.watson.developer_cloud</groupId>
+			<artifactId>watson-spring-boot-starter</artifactId>
+			<version>0.0.2</version>
+			<scope>system</scope>
+			<systemPath>C:\java_dev\watson-spring-boot-starter-0.0.2\watson-spring-boot-starter-0.0.2-jar-with-dependencies.jar</systemPath>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
+  
 	<build>
 		<plugins>
 			<plugin>

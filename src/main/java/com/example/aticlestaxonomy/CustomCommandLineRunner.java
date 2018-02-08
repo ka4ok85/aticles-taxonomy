@@ -16,6 +16,8 @@ import com.ibm.watson.developer_cloud.conversation.v1.Conversation;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalLanguageUnderstanding;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalysisResults;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalyzeOptions;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.CategoriesOptions;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.CategoriesResult;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.EntitiesOptions;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.Features;
 
@@ -34,18 +36,17 @@ public class CustomCommandLineRunner implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		log.info("Starting CustomCommandLineRunner");
 		
-		EntitiesOptions entities = new EntitiesOptions.Builder().sentiment(true).limit(1).build();
-		Features features = new Features.Builder().entities(entities).build();
-		AnalyzeOptions parameters = new AnalyzeOptions.Builder().url("www.cnn.com").features(features).build();
+		CategoriesOptions categories = new CategoriesOptions();
+		Features features = new Features.Builder().categories(categories).build();
+		AnalyzeOptions parameters = new AnalyzeOptions.Builder().url("http://blog.generalmills.com/?p=26424").features(features).build();
 		AnalysisResults results = service.analyze(parameters).execute();
 		System.out.println(results);
-		System.out.println(results.getAnalyzedText());
-		System.out.println(results.getSentiment().getDocument().getLabel());
-		System.out.println(results.getSentiment().getDocument().getScore());
 		
-		//AnalyzeOptions analyzeOptions = new AnalyzeOptions();
-		//analyzeOptions.html();
-		//service.analyze(analyzeOptions);
+		List<CategoriesResult> categoriesResultList = results.getCategories();
+		for (CategoriesResult categoriesResult : categoriesResultList) {
+			System.out.println(categoriesResult.getLabel() + ": " + categoriesResult.getScore());
+		}
+
 		/*
 		List<RssFeed> rssFeeds = rssFeedService.getRssFeedsAvaialbleForProcess();
 		if (rssFeeds.size() == 0) {

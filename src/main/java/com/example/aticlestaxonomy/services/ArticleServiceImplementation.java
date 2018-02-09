@@ -1,6 +1,7 @@
 package com.example.aticlestaxonomy.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,6 +24,12 @@ public class ArticleServiceImplementation implements ArticleService {
 		articleEntity.setRssFeedId(rssFeedId);
 
 		return articleRepository.save(articleEntity);
+	}
+
+	@Override
+	public List<Article> getArticlesAvaialbleForAnalysis() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

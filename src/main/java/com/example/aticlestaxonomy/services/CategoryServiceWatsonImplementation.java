@@ -28,6 +28,7 @@ public class CategoryServiceWatsonImplementation implements CategoryService {
 		AnalysisResults analysisResults = service.analyze(parameters).execute();
 
 		List<CategoriesResult> categoriesResultList = analysisResults.getCategories();
+		// TODO: change to stream?
 		for (CategoriesResult categoriesResult : categoriesResultList) {
 			results.put(categoriesResult.getLabel(), categoriesResult.getScore());
 		}

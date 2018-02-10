@@ -28,8 +28,7 @@ public class ArticleServiceImplementation implements ArticleService {
 
 	@Override
 	public List<Article> getArticlesAvaialbleForAnalysis() {
-		// TODO Auto-generated method stub
-		return null;
+		return articleRepository.findByIsCategorySet(0L);
 	}
 
 }

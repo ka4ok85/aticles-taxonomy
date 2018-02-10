@@ -7,5 +7,5 @@ import com.example.aticlestaxonomy.entities.Category;
 
 @Repository
 public interface CategoryRepository extends CrudRepository<Category, Long> {
-
+	Category findByCategory(String category);
 }

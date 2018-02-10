@@ -1,7 +1,7 @@
 package com.example.aticlestaxonomy.services;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,7 +27,7 @@ public class ArticleServiceImplementation implements ArticleService {
 	}
 
 	@Override
-	public List<Article> getArticlesAvaialbleForAnalysis() {
+	public Stream<Article> getArticlesAvaialbleForAnalysis() {
 		return articleRepository.findByIsCategorySet(0L);
 	}
 

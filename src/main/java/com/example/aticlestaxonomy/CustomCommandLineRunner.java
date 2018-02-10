@@ -3,14 +3,18 @@ package com.example.aticlestaxonomy;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.example.aticlestaxonomy.entities.Article;
 import com.example.aticlestaxonomy.entities.RssFeed;
+import com.example.aticlestaxonomy.services.ArticleService;
 import com.example.aticlestaxonomy.services.RssFeedService;
 import com.ibm.watson.developer_cloud.conversation.v1.Conversation;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalLanguageUnderstanding;
@@ -30,12 +34,31 @@ public class CustomCommandLineRunner implements CommandLineRunner {
 	@Autowired
 	private RssFeedService rssFeedService;
 
+	@Autowired
+	private ArticleService articleService;
+
 	private static final Logger log = LoggerFactory.getLogger(CustomCommandLineRunner.class);
 
 	@Override
+	@Transactional
 	public void run(String... args) throws Exception {
 		log.info("Starting CustomCommandLineRunner");
 		
+		try (Stream<Article> articles = articleService.getArticlesAvaialbleForAnalysis()) {
+
+			articles.forEach(
+					//System.out::println
+					(Article a) -> System.out.println(a)
+			);
+		}
+		/*
+		for (Article article : articles) {
+			System.out.println(article);
+		}
+		*/
+		
+		
+		/*
 		CategoriesOptions categories = new CategoriesOptions();
 		Features features = new Features.Builder().categories(categories).build();
 		AnalyzeOptions parameters = new AnalyzeOptions.Builder().url("http://blog.generalmills.com/?p=26424").features(features).build();
@@ -46,7 +69,7 @@ public class CustomCommandLineRunner implements CommandLineRunner {
 		for (CategoriesResult categoriesResult : categoriesResultList) {
 			System.out.println(categoriesResult.getLabel() + ": " + categoriesResult.getScore());
 		}
-
+*/
 		/*
 		List<RssFeed> rssFeeds = rssFeedService.getRssFeedsAvaialbleForProcess();
 		if (rssFeeds.size() == 0) {

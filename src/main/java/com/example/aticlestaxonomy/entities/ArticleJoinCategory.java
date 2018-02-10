@@ -9,17 +9,17 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="article_join_category")
+@Table(name = "article_join_category")
 public class ArticleJoinCategory {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "article_id", unique = false, nullable = false)
 	@NotNull
 	private Long articleId;
-	
+
 	@Column(name = "category_id", unique = false, nullable = false)
 	@NotNull
 	private Long categoryId;
@@ -65,5 +65,48 @@ public class ArticleJoinCategory {
 		return "ArticleJoinCategory [id=" + id + ", articleId=" + articleId + ", categoryId=" + categoryId + ", weight="
 				+ weight + "]";
 	}
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((articleId == null) ? 0 : articleId.hashCode());
+		result = prime * result + ((categoryId == null) ? 0 : categoryId.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((weight == null) ? 0 : weight.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ArticleJoinCategory other = (ArticleJoinCategory) obj;
+		if (articleId == null) {
+			if (other.articleId != null)
+				return false;
+		} else if (!articleId.equals(other.articleId))
+			return false;
+		if (categoryId == null) {
+			if (other.categoryId != null)
+				return false;
+		} else if (!categoryId.equals(other.categoryId))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (weight == null) {
+			if (other.weight != null)
+				return false;
+		} else if (!weight.equals(other.weight))
+			return false;
+		return true;
+	}
+
 }

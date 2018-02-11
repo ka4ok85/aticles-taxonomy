@@ -14,7 +14,7 @@ public class ArticleServiceImplementation implements ArticleService {
 	private ArticleRepository articleRepository;
 
 	@Override
-	public Article saveArticle(com.example.aticlestaxonomy.dto.Article article, Long rssFeedId) {
+	public Article addArticle(com.example.aticlestaxonomy.dto.Article article, Long rssFeedId) {
 		Article articleEntity = new Article();
 		articleEntity.setTitle(article.getTitle());
 		articleEntity.setUrl(article.getLink());

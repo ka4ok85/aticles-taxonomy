@@ -59,7 +59,7 @@ public class RssFeedServiceImplementation implements RssFeedService {
 				}
 				for (Article article : freshArticles) {
 					try {
-						articleService.saveArticle(article, rssFeed.getId());
+						articleService.addArticle(article, rssFeed.getId());
 						addedArticles++;
 				    } catch (DataIntegrityViolationException e) {
 				    	log.warn("Article is already fetched! URL: {}", article.getLink());

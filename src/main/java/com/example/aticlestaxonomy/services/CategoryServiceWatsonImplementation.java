@@ -1,6 +1,5 @@
 package com.example.aticlestaxonomy.services;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,7 @@ import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.Ca
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.CategoriesResult;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.Features;
 
-public class CategoryServiceWatsonImplementation implements CategoryService {
+public class CategoryServiceWatsonImplementation extends AbstractCategoryServiceImplementation {
 	@Autowired
 	protected NaturalLanguageUnderstanding service;
 

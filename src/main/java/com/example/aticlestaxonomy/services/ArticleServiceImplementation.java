@@ -34,7 +34,7 @@ public class ArticleServiceImplementation implements ArticleService {
 
 	@Override
 	public List<Article> getArticlesAvaialbleForAnalysis() {
-		return articleRepository.findByIsCategorySet(0L);
+		return articleRepository.findFirst100ByIsCategorySet(0L);
 	}
 
 	public Article setCatgoriesForArticle(final Article article, Map<String, Double> categories) {

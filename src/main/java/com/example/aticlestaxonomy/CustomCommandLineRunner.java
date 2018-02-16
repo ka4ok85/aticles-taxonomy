@@ -4,19 +4,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.aticlestaxonomy.entities.Article;
-import com.example.aticlestaxonomy.entities.ArticleJoinCategory;
 import com.example.aticlestaxonomy.repositories.ArticleRepository;
 import com.example.aticlestaxonomy.services.ArticleService;
 import com.example.aticlestaxonomy.services.CategoryService;
@@ -40,7 +36,6 @@ public class CustomCommandLineRunner implements CommandLineRunner {
 	private static final Logger log = LoggerFactory.getLogger(CustomCommandLineRunner.class);
 
 	@Override
-	@Transactional
 	public void run(String... args) throws Exception {
 		log.info("Starting CustomCommandLineRunner");
 
@@ -58,6 +53,7 @@ public class CustomCommandLineRunner implements CommandLineRunner {
 					return futureCategoriesMap.thenApply(categoriesMap -> articleService.setCatgoriesForArticle(article, categoriesMap));
 				})
 				.collect(Collectors.toList());
+
 
 		// trigger and wait until all futures are ready
 		CompletableFuture<Void> allArticlesFuture = CompletableFuture.allOf(futureArticlesList.toArray(new CompletableFuture[futureArticlesList.size()]));

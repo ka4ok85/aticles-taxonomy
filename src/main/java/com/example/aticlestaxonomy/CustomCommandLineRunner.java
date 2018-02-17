@@ -56,7 +56,7 @@ public class CustomCommandLineRunner implements CommandLineRunner {
 
 
 		// trigger and wait until all futures are ready
-		CompletableFuture<Void> allArticlesFuture = CompletableFuture.allOf(futureArticlesList.toArray(new CompletableFuture[futureArticlesList.size()]));
+		CompletableFuture<Void> allArticlesFuture = CompletableFuture.allOf(futureArticlesList.toArray(new CompletableFuture[0]));
 		allArticlesFuture.get();
 
 		/*

@@ -3,7 +3,7 @@ package com.example.aticlestaxonomy.services;
 import java.util.List;
 import java.util.Map;
 
-import com.example.aticlestaxonomy.dto.Category;
+import com.example.aticlestaxonomy.entities.Category;
 import com.example.aticlestaxonomy.entities.Article;
 
 public interface ArticleService {

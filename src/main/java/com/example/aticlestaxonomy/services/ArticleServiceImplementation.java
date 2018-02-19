@@ -1,12 +1,14 @@
 package com.example.aticlestaxonomy.services;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.aticlestaxonomy.entities.Category;
 import com.example.aticlestaxonomy.entities.Article;
 import com.example.aticlestaxonomy.entities.ArticleJoinCategory;
 import com.example.aticlestaxonomy.repositories.ArticleRepository;
@@ -50,6 +52,16 @@ public class ArticleServiceImplementation implements ArticleService {
 		article.setIsCategorySet(1L);
 
 		return articleRepository.save(article);
+	}
+
+	@Override
+	public List<Article> getArticlesByCategories(List<Category> categories) {
+		List<String> categoriesList = new ArrayList<String>();
+		for (Category category : categories) {
+			categoriesList.add(category.getCategory());
+		}
+
+		return articleRepository.findByCategory(categoriesList);
 	}
 
 }

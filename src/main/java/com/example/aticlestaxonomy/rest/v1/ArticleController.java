@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.aticlestaxonomy.dto.Article;
 import com.example.aticlestaxonomy.dto.Category;
 import com.example.aticlestaxonomy.dto.ErrorInfo;
+import com.example.aticlestaxonomy.services.ArticleService;
 import com.example.aticlestaxonomy.services.CategoryService;
 
 @RestController("ArticleControllerV1")
@@ -24,6 +25,9 @@ public class ArticleController {
 
 	@Autowired
 	private CategoryService categoryService;
+
+	@Autowired
+	private ArticleService articleService;
 
 	@RequestMapping(value = "/articles/search", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public ResponseEntity<?> getArticles(@RequestBody List<Category> categories) {
@@ -36,6 +40,7 @@ public class ArticleController {
 			return new ResponseEntity<ErrorInfo>(errorInfo, HttpStatus.BAD_REQUEST);
 		}
 
+		List<com.example.aticlestaxonomy.entities.Category> categoriesList = new ArrayList<com.example.aticlestaxonomy.entities.Category>();
 		for (Category category : categories) {
 			if (null == categoryService.findByCategory(category.getName())) {
 				ErrorInfo errorInfo = new ErrorInfo("Bad Request", HttpServletResponse.SC_BAD_REQUEST,
@@ -43,12 +48,31 @@ public class ArticleController {
 
 				return new ResponseEntity<ErrorInfo>(errorInfo, HttpStatus.BAD_REQUEST);
 			} else {
+				categoriesList.add(categoryService.findByCategory(category.getName()));
 				System.out.println(category.getName());
 			}
-
 		}
 
-		return new ResponseEntity<List<Article>>(articles, HttpStatus.OK);
+		return new ResponseEntity<List<com.example.aticlestaxonomy.entities.Article>>(articleService.getArticlesByCategories(categoriesList), HttpStatus.OK);
+		/*
+		Long storeId = userDetailsService.getStoreId();
+		Page<Product> products;
+		if (isAlreadyInStore == null || isAlreadyInStore == true) {
+			products = productService.getProductsByStoreId(pageable, storeId);
+		} else {
+			products = productService.getProductsNotInStore(pageable, storeId);
+		}
+
+    	try {    	
+    		globalProductService.addProductIntoLocation(productLocationChangeWrapper.getProductId(), storeId, productLocationChangeWrapper.getLocationId(), productLocationChangeWrapper.getQuantity());
+    		return true;
+		} catch (Exception e) {
+			ErrorInfo errorInfo = new ErrorInfo();
+			errorInfo.setMessage(e.getMessage());
+			return new ResponseEntity<String>(errorInfo.getMessage(), HttpStatus.BAD_REQUEST);
+		}    
+*/
+		//return new ResponseEntity<List<Article>>(articles, HttpStatus.OK);
 	}
 
 }

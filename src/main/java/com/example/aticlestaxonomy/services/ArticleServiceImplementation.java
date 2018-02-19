@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -56,10 +57,7 @@ public class ArticleServiceImplementation implements ArticleService {
 
 	@Override
 	public List<Article> getArticlesByCategories(List<Category> categories) {
-		List<String> categoriesList = new ArrayList<String>();
-		for (Category category : categories) {
-			categoriesList.add(category.getCategory());
-		}
+		List<String> categoriesList = categories.stream().map(category -> category.getCategory()).collect(Collectors.toList());
 
 		return articleRepository.findByCategory(categoriesList);
 	}

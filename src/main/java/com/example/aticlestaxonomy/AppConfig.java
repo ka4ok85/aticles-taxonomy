@@ -9,6 +9,7 @@ import com.example.aticlestaxonomy.services.CategoryService;
 import com.example.aticlestaxonomy.services.CategoryServiceWatsonImplementation;
 import com.example.aticlestaxonomy.services.RssFeedService;
 import com.example.aticlestaxonomy.services.RssFeedServiceImplementation;
+import com.example.aticlestaxonomy.services.memorycache.CategoryCache;
 
 @Configuration
 public class AppConfig {
@@ -26,6 +27,11 @@ public class AppConfig {
 	@Bean
 	public CategoryService categoryService() {
 		return new CategoryServiceWatsonImplementation();
+	}
+
+	@Bean
+	public CategoryCache categoryCache() {
+		return new CategoryCache();
 	}
 
 }

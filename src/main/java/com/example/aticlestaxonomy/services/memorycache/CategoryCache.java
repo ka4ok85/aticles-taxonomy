@@ -17,8 +17,12 @@ public class CategoryCache {
 
 	@PostConstruct
 	public void init() {
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>CategoryCache init");
-		categoryRepository.findAll()
-				.forEach(category -> categories.put(category.getId().intValue(), category.getCategory()));
+		categoryRepository.findAll().forEach(
+				category -> categories.put(category.getId().intValue(), category.getCategory())
+		);
+	}
+
+	public String findById(Integer id) {
+		return categories.get(id);
 	}
 }

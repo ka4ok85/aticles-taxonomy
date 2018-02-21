@@ -16,12 +16,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "articles")
 public class Article {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonIgnore
 	private Long id;
 
 	@Column(unique = true, nullable = false)
@@ -38,13 +41,16 @@ public class Article {
 
 	@Column(name = "fetched_datetime", nullable = false)
 	@NotNull
+	@JsonIgnore
 	private LocalDateTime fetchedDatetime;
 
 	@Column(name = "rss_feed_id")
+	@JsonIgnore
 	private Long rssFeedId;
 
 	@Column(name = "is_category_set", nullable = false)
 	@NotNull
+	@JsonIgnore
 	private Long isCategorySet;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)

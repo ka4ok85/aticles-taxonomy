@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.aticlestaxonomy.entities.Category;
+import com.example.aticlestaxonomy.dto.ArticleWithCategories;
 import com.example.aticlestaxonomy.entities.Article;
 
 public interface ArticleService {
@@ -11,4 +12,5 @@ public interface ArticleService {
 	public List<Article> getArticlesAvaialbleForAnalysis();
 	public Article setCatgoriesForArticle(Article article, Map<String, Double> t);
 	public List<Article> getArticlesByCategories(List<Category> categories);
+	public List<ArticleWithCategories> getArticlesWithCategoriesByCategories(List<Category> categories);
 }

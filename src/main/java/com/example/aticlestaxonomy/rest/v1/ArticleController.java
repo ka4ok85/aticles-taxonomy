@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.aticlestaxonomy.dto.Category;
 import com.example.aticlestaxonomy.dto.ErrorInfo;
+import com.example.aticlestaxonomy.dto.ArticleWithCategories;
 import com.example.aticlestaxonomy.services.ArticleService;
 import com.example.aticlestaxonomy.services.CategoryService;
 
@@ -60,7 +61,7 @@ public class ArticleController {
 			}
 		}
 
-		return new ResponseEntity<List<com.example.aticlestaxonomy.entities.Article>>(articleService.getArticlesByCategories(categoriesList), HttpStatus.OK);
+		return new ResponseEntity<List<ArticleWithCategories>>(articleService.getArticlesWithCategoriesByCategories(categoriesList), HttpStatus.OK);
 	}
 
 }

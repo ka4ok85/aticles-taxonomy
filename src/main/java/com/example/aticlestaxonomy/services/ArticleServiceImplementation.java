@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.aticlestaxonomy.entities.Category;
+import com.example.aticlestaxonomy.dto.ArticleWithCategories;
 import com.example.aticlestaxonomy.entities.Article;
 import com.example.aticlestaxonomy.entities.ArticleJoinCategory;
 import com.example.aticlestaxonomy.repositories.ArticleRepository;
@@ -60,6 +61,14 @@ public class ArticleServiceImplementation implements ArticleService {
 		List<String> categoriesList = categories.stream().map(category -> category.getCategory()).collect(Collectors.toList());
 
 		return articleRepository.findByCategory(categoriesList);
+	}
+
+	@Override
+	public List<ArticleWithCategories> getArticlesWithCategoriesByCategories(List<Category> categories) {
+		List<Article> articles = getArticlesByCategories(categories);
+		List<ArticleWithCategories> articleWithCategories = articles.stream().map(article -> new ArticleWithCategories(article)).collect(Collectors.toList());
+
+		return articleWithCategories;
 	}
 
 }

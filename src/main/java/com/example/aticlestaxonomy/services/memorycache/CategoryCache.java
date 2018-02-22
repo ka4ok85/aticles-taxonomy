@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.aticlestaxonomy.repositories.CategoryRepository;
 
 public class CategoryCache {
-	private Map<Integer, String> categories = new HashMap<Integer, String>();
+	private static Map<Long, String> categories = new HashMap<Long, String>();
 
 	@Autowired
 	private CategoryRepository categoryRepository;
@@ -18,11 +18,11 @@ public class CategoryCache {
 	@PostConstruct
 	public void init() {
 		categoryRepository.findAll().forEach(
-				category -> categories.put(category.getId().intValue(), category.getCategory())
+				category -> categories.put(category.getId(), category.getCategory())
 		);
 	}
 
-	public String findById(Integer id) {
+	public static String findById(Long id) {
 		return categories.get(id);
 	}
 }

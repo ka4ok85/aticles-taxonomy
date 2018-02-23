@@ -1,7 +1,6 @@
 package com.example.aticlestaxonomy.services;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -9,7 +8,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.aticlestaxonomy.entities.Category;
 import com.example.aticlestaxonomy.dto.ArticleWithCategories;
 import com.example.aticlestaxonomy.entities.Article;
 import com.example.aticlestaxonomy.entities.ArticleJoinCategory;
@@ -57,14 +55,12 @@ public class ArticleServiceImplementation implements ArticleService {
 	}
 
 	@Override
-	public List<Article> getArticlesByCategories(List<Category> categories) {
-		List<String> categoriesList = categories.stream().map(category -> category.getCategory()).collect(Collectors.toList());
-
-		return articleRepository.findByCategory(categoriesList);
+	public List<Article> getArticlesByCategories(List<String> categories) {
+		return articleRepository.findByCategory(categories);
 	}
 
 	@Override
-	public List<ArticleWithCategories> getArticlesWithCategoriesByCategories(List<Category> categories) {
+	public List<ArticleWithCategories> getArticlesWithCategoriesByCategories(List<String> categories) {
 		List<Article> articles = getArticlesByCategories(categories);
 		List<ArticleWithCategories> articleWithCategories = articles.stream().map(article -> new ArticleWithCategories(article)).collect(Collectors.toList());
 

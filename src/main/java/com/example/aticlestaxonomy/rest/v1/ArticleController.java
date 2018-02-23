@@ -19,6 +19,7 @@ import com.example.aticlestaxonomy.dto.ErrorInfo;
 import com.example.aticlestaxonomy.dto.ArticleWithCategories;
 import com.example.aticlestaxonomy.services.ArticleService;
 import com.example.aticlestaxonomy.services.CategoryService;
+import com.example.aticlestaxonomy.services.memorycache.CategoryCache;
 
 @RestController("ArticleControllerV1")
 @RequestMapping("/v1/")
@@ -49,15 +50,15 @@ public class ArticleController {
 			return new ResponseEntity<ErrorInfo>(errorInfo, HttpStatus.BAD_REQUEST);
 		}
 
-		List<com.example.aticlestaxonomy.entities.Category> categoriesList = new ArrayList<com.example.aticlestaxonomy.entities.Category>();
+		List<String> categoriesList = new ArrayList<String>();
 		for (Category category : categories) {
-			if (null == categoryService.findByCategory(category.getName())) {
+			if (null == CategoryCache.findByCategory(category.getName())) {
 				ErrorInfo errorInfo = new ErrorInfo("Bad Request", HttpServletResponse.SC_BAD_REQUEST,
 						"Category " + category.getName() + " does not exist", this.getClass().getName());
 
 				return new ResponseEntity<ErrorInfo>(errorInfo, HttpStatus.BAD_REQUEST);
 			} else {
-				categoriesList.add(categoryService.findByCategory(category.getName()));
+				categoriesList.add(category.getName());
 			}
 		}
 

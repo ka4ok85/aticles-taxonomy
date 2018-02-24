@@ -13,6 +13,6 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
 
 	List<Article> findFirst100ByIsCategorySet(Long isCategorySet);
 
-	@Query(value = "SELECT articles.* FROM articles, article_join_category, categories WHERE `is_category_set`='1' AND article_join_category.article_id=articles.id AND article_join_category.category_id=categories.id AND categories.category in :categories", nativeQuery = true)
-	List<Article> findByCategory(@Param("categories") List<String> categories);
+	@Query(value = "SELECT articles.* FROM articles, article_join_category, categories WHERE `is_category_set`='1' AND article_join_category.article_id=articles.id AND article_join_category.category_id=categories.id AND categories.category in :categories LIMIT :limit", nativeQuery = true)
+	List<Article> findByCategory(@Param("categories") List<String> categories, @Param("limit") int limit);
 }

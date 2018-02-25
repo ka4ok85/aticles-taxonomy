@@ -10,6 +10,6 @@ public interface ArticleService {
 	public com.example.aticlestaxonomy.entities.Article addArticle(com.example.aticlestaxonomy.dto.Article article, Long rssFeedId);
 	public List<Article> getArticlesAvaialbleForAnalysis();
 	public Article setCatgoriesForArticle(Article article, Map<String, Double> t);
-	public List<Article> getArticlesByCategories(List<String> categories);
-	public List<ArticleWithCategories> getArticlesWithCategoriesByCategories(List<String> categories);
+	public List<Article> getArticlesByCategories(List<String> categories, int articlesLimit);
+	public List<ArticleWithCategories> getArticlesWithCategoriesByCategories(List<String> categories, int articlesLimit);
 }

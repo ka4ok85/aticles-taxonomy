@@ -55,13 +55,13 @@ public class ArticleServiceImplementation implements ArticleService {
 	}
 
 	@Override
-	public List<Article> getArticlesByCategories(List<String> categories) {
-		return articleRepository.findByCategory(categories);
+	public List<Article> getArticlesByCategories(List<String> categories, int articlesLimit) {
+		return articleRepository.findByCategory(categories, articlesLimit);
 	}
 
 	@Override
-	public List<ArticleWithCategories> getArticlesWithCategoriesByCategories(List<String> categories) {
-		List<Article> articles = getArticlesByCategories(categories);
+	public List<ArticleWithCategories> getArticlesWithCategoriesByCategories(List<String> categories, int articlesLimit) {
+		List<Article> articles = getArticlesByCategories(categories, articlesLimit);
 		List<ArticleWithCategories> articleWithCategories = articles.stream().map(article -> new ArticleWithCategories(article)).collect(Collectors.toList());
 
 		return articleWithCategories;

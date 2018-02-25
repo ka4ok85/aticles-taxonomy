@@ -34,6 +34,9 @@ public class ArticleController {
 	@Value("${endpoint.articles-search.categories.max}")
 	private int categoriesMax;
 
+	@Value("${endpoint.articles-search.articles.max}")
+	private int articlesMax;
+
 	@RequestMapping(value = "/articles/search", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public ResponseEntity<?> getArticles(@RequestBody List<Category> categories) {
 		if (categories.size() < 1) {
@@ -62,7 +65,7 @@ public class ArticleController {
 			}
 		}
 
-		return new ResponseEntity<List<ArticleWithCategories>>(articleService.getArticlesWithCategoriesByCategories(categoriesList), HttpStatus.OK);
+		return new ResponseEntity<List<ArticleWithCategories>>(articleService.getArticlesWithCategoriesByCategories(categoriesList, articlesMax), HttpStatus.OK);
 	}
 
 }

@@ -12,5 +12,5 @@ public interface ArticleService {
 	public Article setCatgoriesForArticle(Article article, Map<String, Double> t);
 	public List<Article> getArticlesByCategories(List<String> categories, int articlesLimit);
 	public List<ArticleWithCategories> getArticlesWithCategoriesByCategories(List<String> categories, int articlesLimit);
-	public List<ArticleWithCategories> getArticlesWithCategoriesByCategoriesAndRssFeedId(List<String> categories, int rssFeedId, int articlesLimit);
+	public List<ArticleWithCategories> getArticlesWithCategoriesByCategoriesAndRssFeedsList(List<String> categories, List<Integer> rssFeedsList, int articlesLimit);
 }

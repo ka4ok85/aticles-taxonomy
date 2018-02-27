@@ -44,7 +44,8 @@ public class ArticleServiceImplementation implements ArticleService {
 		categories.forEach((String category, Double value) -> {
 			ArticleJoinCategory articleJoinCategory = new ArticleJoinCategory();
 			articleJoinCategory.setArticleId(article.getId());
-			articleJoinCategory.setCategoryId(categoryService.findByCategory(category).getId());
+			articleJoinCategory.setCategoryId(categoryService.findByCategory(category)
+					.getId());
 			articleJoinCategory.setWeight(value.floatValue());
 			articleJoinCategorySet.add(articleJoinCategory);
 		});
@@ -60,10 +61,24 @@ public class ArticleServiceImplementation implements ArticleService {
 	}
 
 	@Override
-	public List<ArticleWithCategories> getArticlesWithCategoriesByCategories(List<String> categories, int articlesLimit) {
+	public List<ArticleWithCategories> getArticlesWithCategoriesByCategories(List<String> categories,
+			int articlesLimit) {
 		List<Article> articles = getArticlesByCategories(categories, articlesLimit);
-		List<ArticleWithCategories> articleWithCategories = articles.stream().map(article -> new ArticleWithCategories(article)).collect(Collectors.toList());
+		List<ArticleWithCategories> articleWithCategories = articles.stream()
+				.map(article -> new ArticleWithCategories(article))
+				.collect(Collectors.toList());
 
+		return articleWithCategories;
+	}
+
+	@Override
+	public List<ArticleWithCategories> getArticlesWithCategoriesByCategoriesAndRssFeedId(List<String> categories,
+			int rssFeedId, int articlesLimit) {
+		List<ArticleWithCategories> articleWithCategories = articleRepository
+				.findByCategoryAndRssFeed(categories, rssFeedId, articlesLimit)
+				.stream()
+				.map(article -> new ArticleWithCategories(article))
+				.collect(Collectors.toList());
 		return articleWithCategories;
 	}
 

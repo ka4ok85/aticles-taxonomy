@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.aticlestaxonomy.dto.Category;
 import com.example.aticlestaxonomy.dto.ErrorInfo;
 import com.example.aticlestaxonomy.dto.ArticleWithCategories;
+import com.example.aticlestaxonomy.dto.CategoriesAndResource;
 import com.example.aticlestaxonomy.services.ArticleService;
 import com.example.aticlestaxonomy.services.CategoryService;
 import com.example.aticlestaxonomy.services.memorycache.CategoryCache;
@@ -38,15 +39,15 @@ public class ArticleController {
 	private int articlesMax;
 
 	@RequestMapping(value = "/articles/search", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	public ResponseEntity<?> getArticles(@RequestBody List<Category> categories) {
-		if (categories.size() < 1) {
+	public ResponseEntity<?> getArticlesByResource(@RequestBody CategoriesAndResource categoriesAndResource) {
+		if (categoriesAndResource.getCategories().size() < 1) {
 			ErrorInfo errorInfo = new ErrorInfo("Bad Request", HttpServletResponse.SC_BAD_REQUEST,
 					"No categories were specified in Request", this.getClass().getName());
 
 			return new ResponseEntity<ErrorInfo>(errorInfo, HttpStatus.BAD_REQUEST);
 		}
 
-		if (categories.size() > categoriesMax) {
+		if (categoriesAndResource.getCategories().size() > categoriesMax) {
 			ErrorInfo errorInfo = new ErrorInfo("Bad Request", HttpServletResponse.SC_BAD_REQUEST,
 					"More than " + categoriesMax + " categories were specified in Request", this.getClass().getName());
 
@@ -54,7 +55,7 @@ public class ArticleController {
 		}
 
 		List<String> categoriesList = new ArrayList<String>();
-		for (Category category : categories) {
+		for (Category category : categoriesAndResource.getCategories()) {
 			if (null == CategoryCache.findByCategory(category.getName())) {
 				ErrorInfo errorInfo = new ErrorInfo("Bad Request", HttpServletResponse.SC_BAD_REQUEST,
 						"Category " + category.getName() + " does not exist", this.getClass().getName());
@@ -67,5 +68,4 @@ public class ArticleController {
 
 		return new ResponseEntity<List<ArticleWithCategories>>(articleService.getArticlesWithCategoriesByCategories(categoriesList, articlesMax), HttpStatus.OK);
 	}
-
 }
